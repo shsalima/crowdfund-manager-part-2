@@ -22,28 +22,20 @@ import { useSelector } from "react-redux";
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  const isAuth = !!localStorage.getItem("token");
-  const currentRole = localStorage.getItem("role");
+  const { token, role } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (
-      !isAuth &&
-      location.pathname !== "/login" &&
-      location.pathname !== "/register"
-    ) {
+    if (!token) {
       navigate("/login");
     }
+
     if (
-      isAuth &&
-      (location.pathname === "/login" || location.pathname === "/register")
+      (token && location.pathname == "/login") ||
+      location.pathname == "/register"
     ) {
-      if (currentRole === "ivestor") {
-        navigate("/investor-dashboard");
-      } else {
-        navigate("/dashboard");
-      }
+      navigate("/");
     }
-  }, [isAuth, currentRole, location.pathname, navigate]);
+  }, [role, location.pathname, navigate]);
 
   return (
     <>
@@ -51,35 +43,25 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-       
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/project/:id" element={<DetailsProject />} />
 
-            <Route
-              path="/"
-              element={
-                isAuth ? (
-                  currentRole === "investor" ? (
-                    <InvestorDashboard />
-                  ) : (
-                    <Dashboard />
-                  )
-                ) : (
-                  <Login />
-                )
-              }
-            />
-            <Route
-              element={<RoleProtectedRoute allowedRoles={["project owner"]} />}
-            >
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/create-project" element={<CreateProject />} />
-            </Route>
-            <Route element={<RoleProtectedRoute allowedRoles={["ivestor"]} />}>
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/project/:id" element={<DetailsProject />} />
+
+          <Route
+            path="/"
+            element={role === "ivestor" ? <InvestorDashboard /> : <Dashboard />}
+          />
+          <Route
+            element={<RoleProtectedRoute allowedRoles={["project owner"]} />}
+          >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/create-project" element={<CreateProject />} />
+          </Route>
+          <Route element={<RoleProtectedRoute allowedRoles={["ivestor"]} />}>
             <Route path="/investor-dashboard" element={<InvestorDashboard />} />
-              <Route path="/portfolio" element={<Portfolio />} />
-              <Route path="/wallet" element={<Wallet />} />
-            </Route>
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/wallet" element={<Wallet />} />
+          </Route>
           {/* </Route> */}
         </Routes>
       </MainLayout>

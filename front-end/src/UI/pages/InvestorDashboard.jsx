@@ -7,10 +7,14 @@ export default function InvestorDashboard() {
   const navigate = useNavigate();
   const userName = user?.name || "Mehdi";
 
+
+  console.log("inestor dashboahkd");
+  
+
   return (
     <div className="space-y-8 bg-[#0b0c0e] text-white p-2">
       
-      {/* Header Row */}
+   
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Welcome back, {userName}</h1>
@@ -26,7 +30,7 @@ export default function InvestorDashboard() {
         </div>
       </div>
 
-      {/* Grid Stats (Mock data placeholder for design) */}
+     
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-[#111214] border border-zinc-800/80 p-5 rounded-2xl">
           <div className="flex justify-between items-start text-zinc-400">
@@ -55,11 +59,10 @@ export default function InvestorDashboard() {
         </div>
       </div>
 
-      {/* Bottom Layout sections */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-bold">🔥 Active Investment Opportunities</h2>
+            <h2 className="text-lg font-bold"> Active Investment Opportunities</h2>
             <button onClick={() => navigate("/projects")} className="text-zinc-400 text-xs flex items-center gap-1">Explore all <ArrowUpRight size={14}/></button>
           </div>
           
@@ -71,7 +74,7 @@ export default function InvestorDashboard() {
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-lg font-bold">🕒 Recent Operations</h2>
+          <h2 className="text-lg font-bold"> Recent Operations</h2>
           <div className="bg-[#111214] border border-zinc-800/80 p-5 rounded-2xl">
             <div className="flex justify-between text-sm">
               <span>Initial wallet funding</span>
