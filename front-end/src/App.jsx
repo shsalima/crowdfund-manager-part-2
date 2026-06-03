@@ -18,6 +18,7 @@ import Wallet from "./UI/pages/Wallet";
 import { RoleProtectedRoute } from "./UI/components/auth/RoleProtectedRoute";
 
 import { useSelector } from "react-redux";
+import WalletPage from "./UI/pages/WalletPage";
 
 function App() {
   const navigate = useNavigate();
@@ -51,35 +52,35 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-       
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/project/:id" element={<DetailsProject />} />
 
-            <Route
-              path="/"
-              element={
-                isAuth ? (
-                  currentRole === "investor" ? (
-                    <InvestorDashboard />
-                  ) : (
-                    <Dashboard />
-                  )
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/project/:id" element={<DetailsProject />} />
+          <Route path="/wallet" element={<WalletPage />} />
+          <Route
+            path="/"
+            element={
+              isAuth ? (
+                currentRole === "investor" ? (
+                  <InvestorDashboard />
                 ) : (
-                  <Login />
+                  <Dashboard />
                 )
-              }
-            />
-            <Route
-              element={<RoleProtectedRoute allowedRoles={["project owner"]} />}
-            >
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/create-project" element={<CreateProject />} />
-            </Route>
-            <Route element={<RoleProtectedRoute allowedRoles={["ivestor"]} />}>
+              ) : (
+                <Login />
+              )
+            }
+          />
+          <Route
+            element={<RoleProtectedRoute allowedRoles={["project owner"]} />}
+          >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/create-project" element={<CreateProject />} />
+          </Route>
+          <Route element={<RoleProtectedRoute allowedRoles={["ivestor"]} />}>
             <Route path="/investor-dashboard" element={<InvestorDashboard />} />
-              <Route path="/portfolio" element={<Portfolio />} />
-              <Route path="/wallet" element={<Wallet />} />
-            </Route>
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/wallet" element={<Wallet />} />
+          </Route>
           {/* </Route> */}
         </Routes>
       </MainLayout>
