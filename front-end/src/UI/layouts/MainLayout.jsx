@@ -2,17 +2,22 @@ import {
   LayoutDashboard,
   FolderKanban,
   PlusCircle,
+  Briefcase,     
+  Wallet,
   LogOut,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router";
 import AppHeader from "./AppHeader";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/authSlice";
 
 export default function MainLayout({ children }) {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const {role}= useSelector((state)=> state.auth)
+  const currentRole = role || localStorage.getItem("role")
   
 
   const getLinkStyle = (path) => {
@@ -65,14 +70,34 @@ export default function MainLayout({ children }) {
                     <FolderKanban size={18} />
                     <span>Projects</span>
                   </Link>
-
-                  <Link
+                  {currentRole === "project owner" &&(
+                    <Link
                     to="/create-project"
                     className={getLinkStyle("/create-project")}
                   >
                     <PlusCircle size={18} />
                     <span>Create Project</span>
                   </Link>
+
+                  )}
+                  {currentRole === "ivestor" &&(
+                    <>
+                      <Link to="/portfolio" className={getLinkStyle("/portfolio")}>
+                        <Briefcase size={18} />
+                        <span>Portfolio</span>
+                      </Link>
+
+                      <Link to="/wallet" className={getLinkStyle("/wallet")}>
+                        <Wallet size={18} />
+                        <span>Wallet</span>
+                      </Link>
+                    </>
+
+                  )
+
+                  }
+
+                  
                 </nav>
               </div>
             </div>

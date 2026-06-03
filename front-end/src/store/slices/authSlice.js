@@ -7,13 +7,14 @@ export const loginUser = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const data = await authService.login(credentials);
-      console.log("....");
+     
 
       if (data.token) localStorage.setItem("token", data.token);
+      if(data.user?.role) localStorage.setItem("role",data.user.role)
+
       return data;
     } catch (error) {
       console.log(error);
-
       return rejectWithValue(error.response?.data?.message || "Login failed");
     }
   },
@@ -26,6 +27,7 @@ export const registerUser = createAsyncThunk(
       const data = await authService.register(userData);
 
       if (data.token) localStorage.setItem("token", data.token);
+      if (data.user?.role) localStorage.setItem("role", data.user.role);
       return data;
     } catch (error) {
       console.log(error.response);
@@ -40,6 +42,7 @@ export const registerUser = createAsyncThunk(
 const initialState = {
   user: null,
   token: localStorage.getItem("token") || null,
+  role:localStorage.getItem("role") || null,
   loading: false,
   error: null,
 };
@@ -50,8 +53,10 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem("token");
+      localStorage.removeItem("role");
       state.user = null;
       state.token = null;
+      state.role = null;
       state.error = null;
     },
     clearError: (state) => {
@@ -69,7 +74,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.user = action.payload.user;
-      })
+        state.role = action.payload.user?.role;   
+         })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
@@ -84,6 +90,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.user = action.payload.user;
+        state.role = action.payload.user?.role;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
