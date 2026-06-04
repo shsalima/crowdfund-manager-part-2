@@ -1,0 +1,83 @@
+.balance-card {
+  position: relative;
+  padding: 2rem;
+  overflow: hidden;
+  background: linear-gradient(135deg, #18181b 0%, #202024 50%, #18181b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+}
+
+.balance-card__blur {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 16rem;
+  height: 16rem;
+
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 50%;
+  filter: blur(60px);
+
+  pointer-events: none;
+}
+
+.balance-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  margin-bottom: 3rem;
+}
+
+.balance-card__label {
+  display: block;
+
+  margin-bottom: 0.5rem;
+
+  color: #71717a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.balance-card__amount {
+  color: #ffffff;
+  font-size: 3rem;
+  font-weight: 700;
+  font-family: monospace;
+  line-height: 1;
+}
+
+.balance-card__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.75rem;
+
+  background: #ffffff;
+  color: #000000;
+
+  border-radius: 16px;
+}
+
+.balance-card__info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.75rem;
+
+  font-size: 0.75rem;
+  color: #71717a;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.balance-card__zap {
+  color: #fbbf24;
+  flex-shrink: 0;
+}
