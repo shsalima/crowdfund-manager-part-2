@@ -2,7 +2,7 @@ import {
   LayoutDashboard,
   FolderKanban,
   PlusCircle,
-  Briefcase,     
+  Briefcase,
   Wallet,
   LogOut,
 } from "lucide-react";
@@ -10,33 +10,39 @@ import { Link, useLocation, useNavigate } from "react-router";
 import AppHeader from "./AppHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/authSlice";
+import NotFound from "../components/auth/Not-found";
+import { useEffect } from "react";
 
-export default function MainLayout({ children }) {
+export default function MainLayout({ allowedRole, children }) {
+ 
+
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { role } = useSelector((state) => state.auth);
+  const currentRole = role || localStorage.getItem("role");
+  console.log(currentRole);
 
-  const {role}= useSelector((state)=> state.auth)
-  const currentRole = role || localStorage.getItem("role")
-  
+  if (allowedRole != undefined) {
+    if (allowedRole != currentRole) {
+      return <NotFound />;
+    }
+  }
 
   const getLinkStyle = (path) => {
     const isActive = pathname === path;
     return (
       `w-full px-4 py-3 rounded-xl flex items-center gap-3 font-medium text-sm transition-all duration-200 ` +
       (isActive
-        ? "bg-white text-[#0b0c0e]" 
-        : "text-zinc-400 hover:bg-[#111214] hover:text-white") 
+        ? "bg-white text-[#0b0c0e]"
+        : "text-zinc-400 hover:bg-[#111214] hover:text-white")
     );
   };
 
-
   const handleLogout = () => {
-    dispatch(logout()); 
-    navigate("/login"); 
+    dispatch(logout());
+    navigate("/login");
   };
-
-
 
   const isAuthPage = pathname === "/login" || pathname === "/register";
 
@@ -61,7 +67,7 @@ export default function MainLayout({ children }) {
                 </h2>
 
                 <nav className="space-y-1">
-                  <Link to="/dashboard" className={getLinkStyle("/dashboard")}>
+                  <Link to="/" className="flex items-center gap-3">
                     <LayoutDashboard size={18} />
                     <span>Dashboard</span>
                   </Link>
@@ -70,19 +76,21 @@ export default function MainLayout({ children }) {
                     <FolderKanban size={18} />
                     <span>Projects</span>
                   </Link>
-                  {currentRole === "project owner" &&(
+                  {currentRole === "project owner" && (
                     <Link
-                    to="/create-project"
-                    className={getLinkStyle("/create-project")}
-                  >
-                    <PlusCircle size={18} />
-                    <span>Create Project</span>
-                  </Link>
-
+                      to="/create-project"
+                      className={getLinkStyle("/create-project")}
+                    >
+                      <PlusCircle size={18} />
+                      <span>Create Project</span>
+                    </Link>
                   )}
-                  {currentRole === "ivestor" &&(
+                  {currentRole === "ivestor" && (
                     <>
-                      <Link to="/portfolio" className={getLinkStyle("/portfolio")}>
+                      <Link
+                        to="/portfolio"
+                        className={getLinkStyle("/portfolio")}
+                      >
                         <Briefcase size={18} />
                         <span>Portfolio</span>
                       </Link>
@@ -92,12 +100,7 @@ export default function MainLayout({ children }) {
                         <span>Wallet</span>
                       </Link>
                     </>
-
-                  )
-
-                  }
-
-                  
+                  )}
                 </nav>
               </div>
             </div>
@@ -105,7 +108,6 @@ export default function MainLayout({ children }) {
 
           <div className="p-4 border-t border-zinc-800/60">
             <Link
-
               to="/login"
               onClick={handleLogout}
               className="w-full px-4 py-3 rounded-xl flex items-center gap-3 font-medium text-sm text-zinc-400 hover:bg-[#111214] hover:text-white transition-all duration-200"
