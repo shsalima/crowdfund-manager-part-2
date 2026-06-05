@@ -19,12 +19,12 @@ export default function DashboardStats({ availableBalance, totalInvested, funded
 
       <div className="bg-[#111214] border border-zinc-800/80 p-5 rounded-2xl">
         <span className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase">Funded Projects</span>
-        <div className="text-2xl font-bold mt-4">{fundedProjectsCount}</div>
+        <div className="text-2xl font-bold mt-4">{fundedProjectsCount} {fundedProjectsCount === 1 ? 'Project' : 'Projects'}</div>
       </div>
 
       <div className="bg-[#111214] border border-zinc-800/80 p-5 rounded-2xl">
         <span className="text-[11px] font-bold tracking-wider text-zinc-400 uppercase">Total Platform Projects</span>
-        <div className="text-2xl font-bold mt-4">{totalOpenProjectsCount}</div>
+        <div className="text-2xl font-bold mt-4">{totalOpenProjectsCount} {totalOpenProjectsCount === 1 ? 'Active' : 'Active'}</div>
       </div>
     </div>
   );

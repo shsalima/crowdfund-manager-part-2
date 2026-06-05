@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router";
+import { Route, RouterProvider, Routes, useLocation } from "react-router";
 import MainLayout from "./UI/layouts/MainLayout";
 
 import AppHeader from "./UI/layouts/AppHeader";
@@ -18,53 +18,22 @@ import Wallet from "./UI/pages/Wallet";
 import { RoleProtectedRoute } from "./UI/components/auth/RoleProtectedRoute";
 
 import { useSelector } from "react-redux";
+import GlobalDashboard from "./UI/pages/GlobalDashboard";
+import { router } from "./routes/router";
 
 function App() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { token, role } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-
-    if (
-      (token && location.pathname == "/login") ||
-      location.pathname == "/register"
-    ) {
-      navigate("/");
-    }
-  }, [role, location.pathname, navigate]);
 
   return (
     <>
-      <MainLayout>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+      
 
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/project/:id" element={<DetailsProject />} />
 
-          <Route
-            path="/"
-            element={role === "ivestor" ? <InvestorDashboard /> : <Dashboard />}
-          />
-          <Route
-            element={<RoleProtectedRoute allowedRoles={["project owner"]} />}
-          >
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/create-project" element={<CreateProject />} />
-          </Route>
-          <Route element={<RoleProtectedRoute allowedRoles={["ivestor"]} />}>
-            <Route path="/investor-dashboard" element={<InvestorDashboard />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/wallet" element={<Wallet />} />
-          </Route>
-          {/* </Route> */}
-        </Routes>
-      </MainLayout>
+
+     <RouterProvider router={router}>
+            < MainLayout />
+        </RouterProvider>
+
     </>
   );
 }

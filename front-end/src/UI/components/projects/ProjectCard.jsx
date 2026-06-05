@@ -98,7 +98,7 @@ currentAmount}
           </div>
         </div>
 
-        <Link to={`/project/${project._id}`} className="w-full bg-[#16171a] hover:bg-zinc-800 text-white font-medium text-xs py-3 rounded-xl border border-zinc-800/80 flex items-center justify-center gap-2 transition-all cursor-pointer">
+        <Link to={`/projects/${project._id}`} className="w-full bg-[#16171a] hover:bg-zinc-800 text-white font-medium text-xs py-3 rounded-xl border border-zinc-800/80 flex items-center justify-center gap-2 transition-all cursor-pointer">
 
           <span>View Details</span>
           <MoveRight size={14} />

@@ -7,7 +7,7 @@ import DashboardStats from "../components/dashboard/DashboardStats";
 import ProjectCard from "../components/dashboard/ProjectCard"; 
 
 import { fetchProjects } from "../../store/slices/projectSlice"; 
-import { fetchUserBalance } from "../../store/slices/balanceSlice"; // <--- Import men balanceSlice jdid
+import { fetchUserBalance } from "../../store/slices/balanceSlice"; 
 
 export default function InvestorDashboard() {
   const navigate = useNavigate();
@@ -16,11 +16,9 @@ export default function InvestorDashboard() {
   const { user } = useSelector((state) => state.auth);
  
   const userName = user?.name;
-  
-  
   const investorId = user?._id ;
 
-  const { amount: currentBalance } = useSelector((state) => state.balance);
+  const { amount: availableBalance } = useSelector((state) => state.balance);
 
   const { items: projects, loading } = useSelector((state) => state.projects);
   console.log("Projects in dashboard:", projects);
@@ -31,25 +29,34 @@ export default function InvestorDashboard() {
   }, [dispatch]);
 
 
-  const availableBalance = currentBalance  
+  // const availableBalance = currentBalance  
 
 
   const openProjects = Array.isArray(projects) 
     ? projects.filter(p => p.status?.toLowerCase() === "open") 
     : [];
   const totalOpenProjectsCount = openProjects.length;
-  console.log("Open projects count:", totalOpenProjectsCount);
+  console.log("ch7al mn project open:", totalOpenProjectsCount);
 
 
   const fundedProjects = Array.isArray(projects)
-    ? projects.filter(p => p.investors?.some(inv => (inv.investorId?._id || inv.investorId || inv) === investorId))
-    : [];
-  const fundedProjectsCount = fundedProjects.length;
+    ? projects.filter(p => p.investors?.some(inv => {
 
-  const totalInvested = fundedProjects.reduce((total, p) => {
-    const investmentDetails = p.investors?.find(inv => (inv.investorId?._id || inv.investorId || inv) === investorId);
-    return total + (investmentDetails?.amount || 0);
-  }, 0);
+     return inv.investorId === investorId;
+    }))
+    : [];
+const fundedProjectsCount = fundedProjects.length;
+  console.log("ch7al mn project kayn", fundedProjectsCount);
+
+ const totalInvested = fundedProjects.reduce((total, p) => {
+  const userInvestmentsInProject = p.investors?.reduce((sum, inv) => {
+    return inv.investorId === investorId ? sum + (inv.amount || 0) : sum;
+  }, 0) || 0;
+
+  return total + userInvestmentsInProject;
+}, 0);
+
+console.log("Total clean money invested:", totalInvested);
 
   return (
     <div className="space-y-8 bg-[#0b0c0e] text-white p-2">
@@ -71,7 +78,7 @@ export default function InvestorDashboard() {
       </div>
 
       <DashboardStats 
-        availableBalance={availableBalance}
+       availableBalance={availableBalance}
         totalInvested={totalInvested}
         fundedProjectsCount={fundedProjectsCount}
         totalOpenProjectsCount={totalOpenProjectsCount}
@@ -80,9 +87,9 @@ export default function InvestorDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
        
-        <div className="lg:col-span-2 space-y-4">
+        {/* <div className="lg:col-span-2 space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-bold">🔥 Active Investment Opportunities</h2>
+            <h2 className="text-lg font-bold"> Active Investment Opportunities</h2>
             <button onClick={() => navigate("/projects")} className="text-zinc-400 text-xs flex items-center gap-1 hover:text-white transition">
               Explore all <ArrowUpRight size={14}/>
             </button>
@@ -102,13 +109,13 @@ export default function InvestorDashboard() {
             ) : (
               <p className="text-zinc-500 text-sm col-span-2">No open opportunities at the moment.</p>
             )}
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
 
       
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-bold">⏱️ Recent Operations</h2>
+            <h2 className="text-lg font-bold"> Recent Operations</h2>
             <span className="text-zinc-500 text-xs cursor-pointer hover:text-zinc-400">View history</span>
           </div>
           <div className="bg-[#111214] border border-zinc-800/80 p-5 rounded-2xl space-y-4">
@@ -127,7 +134,7 @@ export default function InvestorDashboard() {
               <span className="text-zinc-400 font-bold">-$50,000</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
       </div>
     </div>

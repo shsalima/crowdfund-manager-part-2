@@ -11,7 +11,7 @@ export const fetchProjects= createAsyncThunk(
             const response= await axios.get(`${VITE_API_URL}/project`, {
                 headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}
             })
-            // console.log(response.data);
+            console.log("data dyal project",response.data);
             return response.data;
         
         }catch(error){
