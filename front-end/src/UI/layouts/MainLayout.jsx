@@ -10,14 +10,24 @@ import { Link, useLocation, useNavigate } from "react-router";
 import AppHeader from "./AppHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/authSlice";
+import NotFound from "../components/auth/Not-found";
+import { useEffect } from "react";
 
-export default function MainLayout({ children }) {
+export default function MainLayout({ allowedRole, children }) {
+ 
+
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { role } = useSelector((state) => state.auth);
   const currentRole = role || localStorage.getItem("role");
+  console.log(currentRole);
+
+  if (allowedRole != undefined) {
+    if (allowedRole != currentRole) {
+      return <NotFound />;
+    }
+  }
 
   const getLinkStyle = (path) => {
     const isActive = pathname === path;
@@ -57,7 +67,7 @@ export default function MainLayout({ children }) {
                 </h2>
 
                 <nav className="space-y-1">
-                  <Link to="/" className={getLinkStyle("/dashboard")}>
+                  <Link to="/" className="flex items-center gap-3">
                     <LayoutDashboard size={18} />
                     <span>Dashboard</span>
                   </Link>

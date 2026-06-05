@@ -7,7 +7,7 @@ export const RoleProtectedRoute = ({ allowedRoles }) => {
   const currentRole = role || localStorage.getItem("role");
 
   if (!allowedRoles.includes(currentRole)) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/not-found" replace />;
   }
 
   return <Outlet />;

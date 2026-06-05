@@ -14,7 +14,7 @@ export const loginUser = createAsyncThunk(
 
       return data;
     } catch (error) {
-      console.log(error);
+      console.log("fff",error);
       return rejectWithValue(error.response?.data?.message || "Login failed");
     }
   },
@@ -27,7 +27,7 @@ export const registerUser = createAsyncThunk(
       const data = await authService.register(userData);
 
       if (data.token) localStorage.setItem("token", data.token);
-      if (data.user?.role) localStorage.setItem("role", data.user.role);
+      if (data.newUser?.role) localStorage.setItem("role", data.newUser.role);
       return data;
     } catch (error) {
       console.log(error.response);
@@ -89,8 +89,8 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
-        state.user = action.payload.user;
-        state.role = action.payload.user?.role;
+        state.user = action.payload.newUser;
+        state.role = action.payload.newUser?.role;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;

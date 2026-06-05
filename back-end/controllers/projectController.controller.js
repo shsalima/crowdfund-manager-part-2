@@ -43,7 +43,7 @@ export const createProject = async (req, res) => {
 
 export const getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.find({ owner: req.user.user._id })
+    const projects = await Project.find({})
       .populate("owner", "name email role") 
       .sort({ createdAt: -1 }); 
 
@@ -58,6 +58,7 @@ export const getAllProjects = async (req, res) => {
      
         const formattedInvestors = investments.map((inv) => ({
           _id: inv._id,
+          investorId: inv.investor ? inv.investor._id : null, 
           name: inv.investor ? inv.investor.name : "Anonymous Investor",
           amount: inv.amount,
         }));
