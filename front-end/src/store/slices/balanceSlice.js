@@ -39,6 +39,7 @@ const balanceSlice = createSlice({
       .addCase(fetchUserBalance.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.amount = 0; // ✅ ISLA7 CORE: Ila mal9ash balance (404), rjja3ha 0 nichen!
       });
   }
 });

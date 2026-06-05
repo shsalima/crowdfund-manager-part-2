@@ -18,8 +18,9 @@ export default function InvestorDashboard() {
   const userName = user?.name;
   const investorId = user?._id ;
 
-  const { amount: availableBalance } = useSelector((state) => state.balance);
-
+const { amount, error: balanceError } = useSelector((state) => state.balance);
+  const availableBalance = balanceError ? 0 : (amount || 0);
+  
   const { items: projects, loading } = useSelector((state) => state.projects);
   console.log("Projects in dashboard:", projects);
 

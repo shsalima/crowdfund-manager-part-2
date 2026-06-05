@@ -143,6 +143,7 @@ export const updateProject = async (req, res) => {
 
 export const deleteProject = async (req, res) => {
   try {
+    
     const { id } = req.params;
     const project = await Project.findById(id);
     if (!project) {
