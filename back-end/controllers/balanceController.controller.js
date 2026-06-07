@@ -46,6 +46,12 @@ import Balance from "../models/balance.js";
 export const createBalance = async (req, res) => {
   try {
     const { amount } = req.body;
+    console.log(
+      "createBalance called with amount:",
+      amount,
+      "user:",
+      req.user?.user?._id || req.user?.userId,
+    );
 
     if (amount == null || amount <= 0) {
       return res.status(400).json({
@@ -66,9 +72,16 @@ export const createBalance = async (req, res) => {
     } else {
       // Additional deposits
       balance.amount += amount;
+      console.log(
+        "Adding amount to balance:",
+        amount,
+        "=> new amount will be:",
+        balance.amount,
+      );
       await balance.save();
     }
 
+    console.log("Returning balance:", balance);
     res.status(200).json(balance);
   } catch (err) {
     res.status(500).json({

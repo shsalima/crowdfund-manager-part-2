@@ -1,22 +1,27 @@
-import { ArrowDownLeft } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import "../../../assets/style.css";
 
-export default function TransactionItem() {
+export default function TransactionItem({ operation }) {
+  const { type, amount, description, date } = operation || {};
+  const isDeposit = type === "deposit";
+
+  const formattedAmount = (amount ?? 0).toLocaleString();
+  const formattedDate = date ? new Date(date).toLocaleString() : "";
+
   return (
     <div className="transaction-item">
       <div className="transaction-info">
         <p className="transaction-description">
-          Initial wallet deposit
+          {description || (isDeposit ? "Deposit" : "Withdraw")}
         </p>
-
-        <p className="transaction-date">
-          Jun 5, 2026, 10:30 AM
-        </p>
+        <p className="transaction-date">{formattedDate}</p>
       </div>
 
-      <span className="transaction-amount deposit">
-        <ArrowDownLeft size={14} />
-        $5,000
+      <span
+        className={`transaction-amount ${isDeposit ? "deposit" : "withdraw"}`}
+      >
+        {isDeposit ? <ArrowDownLeft size={14} /> : <ArrowUpRight size={14} />}
+        {formattedAmount} DH
       </span>
     </div>
   );

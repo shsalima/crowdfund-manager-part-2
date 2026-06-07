@@ -4,6 +4,8 @@ import { fetchUserBalance } from "../../../store/slices/balanceSlice";
 import "../../../assets/style.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { addTransaction } from "../../../store/slices/transactionSlice";
+
 export default function DepositSection() {
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
@@ -19,8 +21,10 @@ export default function DepositSection() {
       return;
     }
     try {
-      const result = await dispatch(deposit(Number(amount))).unwrap();
+      console.log("Submitting deposit amount (client):", Number(amount));
+      await dispatch(deposit(Number(amount))).unwrap();
       dispatch(fetchUserBalance());
+      dispatch(addTransaction({ amount: Number(amount) }));
       setAmount("");
       setSuccess("Wallet funds replenished successfully!");
       setTimeout(() => setSuccess(""), 3000);
@@ -72,7 +76,9 @@ export default function DepositSection() {
       <form className="deposit-form" onSubmit={handelSubmit}>
         <input
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) =>
+            setAmount(e.target.value === "" ? "" : Number(e.target.value))
+          }
           type="number"
           placeholder="Enter deposit amount"
           className="deposit-input"
