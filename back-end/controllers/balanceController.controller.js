@@ -1,30 +1,79 @@
+// import Balance from "../models/balance.js";
+
+// export const createBalance = async (req, res) => {
+//   try {
+//     const { amount } = req.body;
+
+//     if (amount == null || amount < 0) {
+//       return res
+//         .status(400)
+//         .json({ message: "amount import et supérieur à 0" });
+//     }
+
+//     // kaycheck wach déjà kayn :chi balance 3and had investor
+//     const existBalance = await Balance.findOne({
+//       user: req.user.user._id,
+//     });
+
+//     if (existBalance) {
+//       return res.status(400).json({ message: "balance déjà trouvé" });
+//     }
+//     const balance = await Balance.create({
+//       user: req.user.user._id,
+//       amount: amount,
+//     });
+//     res.status(201).json(balance);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
+
+// export const getBalance = async (req, res) => {
+//   try {
+//     const balance = await Balance.findOne({
+//       user: req.user.user._id,
+//     });
+//     if (!balance) {
+//       return res.status(404).json({ message: "balance non trouvé" });
+//     }
+//     res.status(200).json(balance);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
 import Balance from "../models/balance.js";
 
 export const createBalance = async (req, res) => {
   try {
     const { amount } = req.body;
 
-    if (amount == null || amount < 0) {
-      return res
-        .status(400)
-        .json({ message: "amount import et supérieur à 0" });
+    if (amount == null || amount <= 0) {
+      return res.status(400).json({
+        message: "amount important et supérieur à 0",
+      });
     }
 
-    // kaycheck wach déjà kayn :chi balance 3and had investor
-    const existBalance = await Balance.findOne({
+    let balance = await Balance.findOne({
       user: req.user.user._id,
     });
 
-    if (existBalance) {
-      return res.status(400).json({ message: "balance déjà trouvé" });
+    // First deposit
+    if (!balance) {
+      balance = await Balance.create({
+        user: req.user.user._id,
+        amount,
+      });
+    } else {
+      // Additional deposits
+      balance.amount += amount;
+      await balance.save();
     }
-    const balance = await Balance.create({
-      user: req.user.user._id,
-      amount: amount,
-    });
-    res.status(201).json(balance);
+
+    res.status(200).json(balance);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: err.message,
+    });
   }
 };
 
@@ -33,11 +82,17 @@ export const getBalance = async (req, res) => {
     const balance = await Balance.findOne({
       user: req.user.user._id,
     });
+
     if (!balance) {
-      return res.status(404).json({ message: "balance non trouvé" });
+      return res.status(404).json({
+        message: "balance non trouvé",
+      });
     }
+
     res.status(200).json(balance);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: err.message,
+    });
   }
 };

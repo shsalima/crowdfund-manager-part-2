@@ -1,16 +1,34 @@
 import { Sparkles, BadgeAlert, CircleCheck } from "lucide-react";
 import { deposit } from "../../../store/slices/walletSlice";
+import { fetchUserBalance } from "../../../store/slices/balanceSlice";
 import "../../../assets/style.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 export default function DepositSection() {
   const [amount, setAmount] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const dispatch = useDispatch();
 
-  const handelSubmit = (e) => {
+  const handelSubmit = async (e) => {
     e.preventDefault();
-    dispatch(deposit(Number(amount)));
-    setAmount("");
+    setError("");
+    setSuccess("");
+    if (!amount || Number(amount) <= 0) {
+      setError("Please input a positive numeric contribution.");
+      return;
+    }
+    try {
+      const result = await dispatch(deposit(Number(amount))).unwrap();
+      dispatch(fetchUserBalance());
+      setAmount("");
+      setSuccess("Wallet funds replenished successfully!");
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (error) {
+      setError(error || "Deposit failed. Please try again.");
+      setTimeout(() => setError(""), 5000);
+      console.error("Deposit failed:", error);
+    }
   };
 
   return (
@@ -64,16 +82,18 @@ export default function DepositSection() {
           Deposit
         </button>
       </form>
-
-      <div className="alert alert--error">
-        <BadgeAlert size={16} />
-        <span>Please input a positive numeric contribution.</span>
-      </div>
-
-      <div className="alert alert--success">
-        <CircleCheck size={16} />
-        <span>Wallet funds replenished successfully!</span>
-      </div>
+      {error && (
+        <div className="alert alert--error">
+          <BadgeAlert size={16} />
+          <span>{error}</span>
+        </div>
+      )}
+      {success && (
+        <div className="alert alert--success">
+          <CircleCheck size={16} />
+          <span>{success}</span>
+        </div>
+      )}
     </div>
   );
 }

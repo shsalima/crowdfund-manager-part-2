@@ -3,8 +3,8 @@ import "../../../assets/style.css";
 import { useSelector } from "react-redux";
 
 export default function BalanceCard() {
-  const amount = useSelector((state) => state.wallet.amount);
-
+  const amount = useSelector((state) => state.balance.amount);
+  console.log(amount);
   return (
     <div className="balance-card">
       <div className="balance-card__blur"></div>

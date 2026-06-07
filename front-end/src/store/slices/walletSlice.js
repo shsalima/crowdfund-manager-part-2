@@ -28,11 +28,12 @@ const walletSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(deposit.pending, (state) => {
-        ((state.isLoading = true), (state.error = null));
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(deposit.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.amount = state.amount + action.payload.amount;
+        state.amount = action.payload.amount;
       })
       .addCase(deposit.rejected, (state, action) => {
         state.isLoading = false;
