@@ -11,6 +11,7 @@ import Wallet from "../UI/pages/Wallet";
 import GlobalProject from "../UI/pages/GlobalProject";
 import GlobalDetail from "../UI/pages/GlobalDetail";
 import CreateProject from "../UI/pages/CreateProject";
+import WalletPage from "../UI/pages/WalletPage";
 
 
 export const router = createBrowserRouter([
@@ -62,7 +63,7 @@ export const router = createBrowserRouter([
         path: "/wallet",
         element: (
             <MainLayout  allowedRole="ivestor">
-                <Wallet />
+                <WalletPage />
             </MainLayout>
         ),
     },
